@@ -40,8 +40,6 @@ async function run() {
 
 
     app.get('/allToys/:category', async (req, res) => {
-
-        // console.log(req.params.category);
         if(req.params.category == "Unicorn" || req.params.category == "Teddy-bear" || req.params.category == "Dinosaur"){
             const query = {sub_category: req.params.category};
             const result = await toysCollection.find(query).toArray()
@@ -53,6 +51,16 @@ async function run() {
         // const result = await cursor.toArray();
         // res.send(result)
       })
+
+
+
+      // Read or show toy data :-
+    // app.get('/toyDetails/:id', async (req, res) => {
+    //     const id = req.params.id;
+    //     const query = { _id: new ObjectId(id) }
+    //     const result = await toysCollection.findOne(query);
+    //     res.send(result)
+    //   })
   
 
 
