@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 require("dotenv").config();
-const { } = require('mongodb');
+const { ObjectId } = require('mongodb');
 const app = express()
 const port = process.env.PORT || 5000;
 
@@ -55,13 +55,21 @@ async function run() {
 
 
       // Read or show toy data :-
-    // app.get('/toyDetails/:id', async (req, res) => {
-    //     const id = req.params.id;
-    //     const query = { _id: new ObjectId(id) }
-    //     const result = await toysCollection.findOne(query);
-    //     res.send(result)
-    //   })
+    app.get('/toyDetails/:id', async (req, res) => {
+        const id = req.params.id;
+        const query = { _id: new ObjectId(id) }
+        const result = await toysCollection.findOne(query);
+        res.send(result)
+      })
   
+
+      // Create or add or insert new services data:- 
+    app.post('/addToys', async (req, res) => {
+        const newServices = req.body;
+        const result = await toysCollection.insertOne(newServices)
+        res.send(result)
+      })
+
 
 
 
