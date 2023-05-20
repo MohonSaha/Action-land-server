@@ -91,6 +91,18 @@ async function run() {
             res.send(result)
         })
 
+        // get some data of toys in update page
+        app.get('/update/:id', async(req, res) => {
+            const id = req.params.id;
+            const query = {_id: new ObjectId(id)}
+            const options = {
+                projection: {price:1, quantity: 1, details: 1}
+            };
+            const result = await toysCollection.findOne(query, options)
+            res.send(result)
+        })
+
+
 
         // Create or add or insert new toys data:- 
         app.post('/addToys', async (req, res) => {
