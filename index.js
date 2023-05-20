@@ -48,7 +48,6 @@ async function run() {
         })
 
 
-
         //Read or show all data of heros and show in photo gallery:-
         app.get('/allHeors', async (req, res) => {
             const cursor = herosCollection.find()
@@ -60,7 +59,7 @@ async function run() {
         app.get('/allToys/:category', async (req, res) => {
             if (req.params.category == "Marvel" || req.params.category == "Star-wars" || req.params.category == "Transformers") {
                 const query = { sub_category: req.params.category };
-                const result = await toysCollection.find(query).toArray()
+                const result = await toysCollection.find(query).limit(4).toArray()
                 console.log(result);
                 return res.send(result)
             }
@@ -77,6 +76,18 @@ async function run() {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) }
             const result = await toysCollection.findOne(query);
+            res.send(result)
+        })
+
+        // get some data through email
+        app.get('/myToys', async(req, res) =>{
+
+            let query = {};
+            if(req.query?.sEmail){
+                query = {sEmail: req.query.sEmail}
+            }
+
+            const result = await toysCollection.find(query).toArray()
             res.send(result)
         })
 
