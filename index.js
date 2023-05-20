@@ -82,14 +82,23 @@ async function run() {
         // get some data through email
         app.get('/myToys', async (req, res) => {
 
+            const sort = parseInt(req.query.sort)
+
+
             let query = {};
             if (req.query?.sEmail) {
                 query = { sEmail: req.query.sEmail }
             }
 
-            const result = await toysCollection.find(query).toArray()
+            const options = {
+                sort: { "price": sort }
+              }
+
+            const result = await toysCollection.find(query).sort(options.sort).toArray()
             res.send(result)
         })
+
+
 
         // get some data of toys in update page
         app.get('/update/:id', async (req, res) => {
@@ -101,6 +110,9 @@ async function run() {
             const result = await toysCollection.findOne(query, options)
             res.send(result)
         })
+
+
+
 
 
 
