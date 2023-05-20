@@ -40,7 +40,7 @@ async function run() {
         })
 
         //Read or show limited toys data:-
-        app.get('/showToys', async(req, res) => {
+        app.get('/showToys', async (req, res) => {
             const cursor = toysCollection.find();
             const result = await cursor.limit(20).toArray();
             res.send(result)
@@ -80,11 +80,11 @@ async function run() {
         })
 
         // get some data through email
-        app.get('/myToys', async(req, res) =>{
+        app.get('/myToys', async (req, res) => {
 
             let query = {};
-            if(req.query?.sEmail){
-                query = {sEmail: req.query.sEmail}
+            if (req.query?.sEmail) {
+                query = { sEmail: req.query.sEmail }
             }
 
             const result = await toysCollection.find(query).toArray()
@@ -92,11 +92,11 @@ async function run() {
         })
 
         // get some data of toys in update page
-        app.get('/update/:id', async(req, res) => {
+        app.get('/update/:id', async (req, res) => {
             const id = req.params.id;
-            const query = {_id: new ObjectId(id)}
+            const query = { _id: new ObjectId(id) }
             const options = {
-                projection: {price:1, quantity: 1, details: 1}
+                projection: { price: 1, quantity: 1, details: 1 }
             };
             const result = await toysCollection.findOne(query, options)
             res.send(result)
@@ -112,10 +112,37 @@ async function run() {
         })
 
 
-        // delete toy
-        app.delete('/myToys/:id', async(req, res)=>{
+
+        // Update existing toyss data :-
+
+        // Receive data from UI:-
+        app.put('/updateToys/:id', async (req, res) => {
             const id = req.params.id;
-            const query = {_id: new ObjectId(id)}
+            const toys = req.body;
+
+            //send update data to the database:-
+            const filter = { _id: new ObjectId(id) };
+            const options = { upsert: true };
+            const updatedToys = {
+                $set: {
+                    price: toys.price,
+                    quantity: toys.quantity,
+                    details: toys.details
+                }
+            }
+            const result = await toysCollection.updateOne(filter, updatedToys, options);
+            res.send(result);
+        })
+
+
+
+
+
+
+        // delete toy
+        app.delete('/myToys/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
             const result = await toysCollection.deleteOne(query);
             res.send(result)
         })
